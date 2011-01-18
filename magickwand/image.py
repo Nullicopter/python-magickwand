@@ -112,7 +112,11 @@ class Image(object):
 
     def _set_compression_quality(self, quality):
         self._check_wand_error(api.MagickSetImageCompressionQuality(self._wand, int(round(quality, 0))))
-
+    
+    def identify(self):
+        ''' Identify information '''
+        return api.MagickIdentifyImage(self._wand, fuzz)
+    
     def save(self, file=None):
         ''' Saves the image to a file.  If no file is specified, the file is
             saved with the original filename.'''
@@ -171,7 +175,11 @@ class Image(object):
 
         api.MagickResetIterator(self._wand)
         return False
-
+    
+    def trim(self, fuzz=0.0):
+        ''' Trims the image '''
+        self._check_wand_error(api.MagickTrimImage(self._wand, fuzz))
+    
     def scale(self, size):
         ''' Scales the size of image to the given dimensions.
 

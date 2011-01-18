@@ -15,6 +15,13 @@ class Color(object):
 
         if color:
             api.PixelSetColor(self._wand, color)
+    
+    @property
+    def color_name(self):
+        return api.PixelGetColorAsString(self._wand)
+    
+    def __repr__(self):
+        return 'Color(%s, a:%s)' % (self.color_name, api.PixelGetAlpha(self._wand))
 
     def __del__(self):
         if self._wand and api:
