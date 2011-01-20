@@ -185,7 +185,13 @@ class Image(object):
 
             size - A tuple containing the size of the scaled image.'''
         self._check_wand_error(api.MagickScaleImage(self._wand, size[0], size[1]))
-
+    
+    def transform(self, crop, size):
+        """
+        Tranforms the image according to MagickTransformImage
+        """
+        self._check_wand_error(api.MagickTransformImage(self._wand, crop, size))
+    
     def resize(self, size, filter=None, blur=0):
         ''' Resize the image with the given filter and applying some blur.
 
