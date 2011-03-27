@@ -5,6 +5,7 @@ class Image(object):
     ''' Represents a single image, supported by a MagickWand.'''
 
     def __init__(self, image=None, type=None):
+        #import pdb; pdb.set_trace()
         self._wand = api.NewMagickWand()
 
         if type:
@@ -14,14 +15,16 @@ class Image(object):
             c = image.read()
             self._check_wand_error(api.MagickReadImageBlob(self._wand, c, len(c)))
         elif image:
-            self._check_wand_error(api.MagickReadImage(self._wand, image))
+            res = api.MagickReadImage(self._wand, image)
+            print res
+            self._check_wand_error(res)
         else:
             self._check_wand_error(api.MagickNewImage(self._wand, 100, 100, color.TRANSPARENT._wand))
 
     def __del__(self):
         if self._wand:
             self._wand = api.DestroyMagickWand(self._wand)
-
+    
     def __copy__(self):
         c = Image()
         if self._wand:
@@ -113,6 +116,10 @@ class Image(object):
     def _set_compression_quality(self, quality):
         self._check_wand_error(api.MagickSetImageCompressionQuality(self._wand, int(round(quality, 0))))
     
+    def destroy(self):
+        if self._wand:
+            self._wand = api.DestroyMagickWand(self._wand)
+    
     def identify(self):
         ''' Identify information '''
         return api.MagickIdentifyImage(self._wand, fuzz)
@@ -130,6 +137,12 @@ class Image(object):
         else:
             self._check_wand_error(api.MagickWriteImage(self._wand, file))
 
+    def iterator_reset(self):
+        api.MagickResetIterator(self._wand)
+    
+    def iterator_next(self):
+        return api.MagickNextImage(self._wand)
+    
     def dump(self, type=None):
         ''' Save the image to a buffer, if no type is specified, original type is used.
 
