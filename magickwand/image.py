@@ -131,7 +131,7 @@ class Image(object):
             size = api.size_t()
             b = api.MagickGetImageBlob(self._wand, size)
             try:
-                file.write(''.join([chr(b[i]) for i in range(0, size.value + 1)]))
+                file.write(''.join([chr(b[i]) for i in range(0, size.value)]))
             finally:
                 api.MagickRelinquishMemory(b)
         else:
@@ -155,7 +155,7 @@ class Image(object):
         size = api.size_t()
         b = api.MagickGetImageBlob(self._wand, size)
         try:
-            result = ''.join([chr(b[i]) for i in range(0, size.value + 1)])
+            result = ''.join([chr(b[i]) for i in range(0, size.value)])
         finally:
             api.MagickRelinquishMemory(b)
 
